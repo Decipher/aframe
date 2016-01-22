@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Drupal Module: A-Frame.
+ *
+ * Integration module with A-Frame, a framework for creating virtual reality
+ * web experiences that work across desktop, mobile, and the Oculus Rift.
+ *
+ * @author: Eleonel Basili <http://drupal.org/u/eleonel>
+ */
+
+/**
+ * Implements hook_page_alter() to insert JavaScript to the appropriate
+ * scope/region of the page.
+ */
+function aframe_page_alter(&$page) {
+  // A-Frame JavaScript remote file.
+  $aframe_lib = 'https://aframe.io/releases/latest/aframe.min.js';
+
+  // Import A-Frame JavaScript file.
+  drupal_add_js($aframe_lib, array(
+    'type' => 'external',
+    'scope' => 'header',
+    'group' => JS_LIBRARY,
+    'every_page' => TRUE,
+    'weight' => -1,
+  ));
+}
