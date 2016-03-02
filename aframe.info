@@ -1,5 +1,0 @@
-name = A-Frame
-description = Integration module with A-Frame, a framework for creating virtual reality web experiences that work across desktop, mobile, and the Oculus Rift.
-core = 7.x
-
-scripts[] = js/script.js

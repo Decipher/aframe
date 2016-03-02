@@ -2,28 +2,62 @@
 
 /**
  * @file
- * Drupal Module: A-Frame.
- *
- * Integration module with A-Frame, a framework for creating virtual reality
- * web experiences that work across desktop, mobile, and the Oculus Rift.
- *
- * @author: Eleonel Basili <http://drupal.org/u/eleonel>
  */
 
 /**
- * Implements hook_page_alter() to insert JavaScript to the appropriate
- * scope/region of the page.
+ * Implements hook_theme().
  */
-function aframe_page_alter(&$page) {
-  // A-Frame JavaScript remote file.
-  $aframe_lib = 'https://aframe.io/releases/latest/aframe.min.js';
+function aframe_theme() {
+  $items['aframe_tag'] = [
+    'render element' => 'element',
+    'file'           => 'aframe.theme.inc',
+  ];
 
-  // Import A-Frame JavaScript file.
-  drupal_add_js($aframe_lib, array(
-    'type' => 'external',
-    'scope' => 'header',
-    'group' => JS_LIBRARY,
-    'every_page' => TRUE,
-    'weight' => -1,
-  ));
+  $items['aframe_field'] = [
+    'render element' => 'element',
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function aframe_element_info_alter(array &$types) {
+  // Add '<a-scene>' element.
+  $types['aframe_scene'] = $types['aframe_tag'];
+  $types['aframe_scene']['#attached'] = [
+    'library' => ['aframe/aframe'],
+  ];
+  $types['aframe_scene']['#tag'] = 'scene';
+
+  // Add primitives.
+  $primitives = [
+    'camera',
+    'cube',
+    'curvedimage',
+    'cylinder',
+    'image',
+    'light',
+    'model',
+    'plane',
+    'sky',
+    'sphere',
+    'video',
+    'videosphere',
+  ];
+  foreach ($primitives as $primitive) {
+    $types["aframe_{$primitive}"] = $types['aframe_tag'];
+    $types["aframe_{$primitive}"]['#tag'] = $primitive;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function aframe_theme_suggestions_field_alter(array &$suggestions, array $variables) {
+  $element = $variables['element'];
+  if (strpos($element['#formatter'], 'aframe_') === 0) {
+    $suggestions = ['aframe_field'];
+  }
 }

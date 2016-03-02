@@ -1,0 +1,10 @@
+aframe:
+  remote: https://github.com/aframevr/aframe
+  version: "v0.1.2"
+  header: true
+  license:
+    name: MIT
+    url: https://github.com/aframevr/aframe/blob/v0.1.2/LICENSE
+    gpl-compatible: true
+  js:
+    js/aframe.min.js: { minified: true }
